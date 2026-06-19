@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OG Gaming Cafe - Abohar</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #0a0a1f; color: #0ff; margin:0; padding:0; }
+        header { background: linear-gradient(#1a0033, #000); padding: 20px; text-align:center; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 15px; }
+        .pc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 15px; }
+        .pc-card { background: #16213e; border: 2px solid #0ff; border-radius: 12px; padding: 15px; text-align:center; }
+        .available { border-color: #0f0; }
+        .booked { border-color: #f66; }
+        .status { padding: 8px; font-weight: bold; border-radius: 8px; margin: 10px 0; }
+        .available .status { background: #003300; color: #0f0; }
+        .booked .status { background: #330000; color: #f66; }
+        form, .bookings-list { background: #16213e; padding: 20px; border-radius: 12px; margin: 20px 0; }
+        input, select, button { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; }
+        button { background: #0ff; color: #000; font-weight: bold; cursor: pointer; }
+        button:hover { background: #0cc; }
+        h1 { margin: 0; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🚀 OG Gaming Cafe</h1>
+        <p>Premium PC Gaming Cafe • Abohar, Punjab</p>
+    </header>
+
+    <div class="container">
+        <h2>Live PC Status</h2>
+        <div class="pc-grid" id="pc-grid"></div>
+
+        <h2>Book Your Slot</h2>
+        <form id="booking-form">
+            <select id="pc-select" required></select>
+            <input type="date" id="date" required>
+            <input type="time" id="time" required>
+            <select id="duration" required>
+                <option value="1">1 Hour - ₹100</option>
+                <option value="2">2 Hours - ₹180</option>
+                <option value="3">3 Hours - ₹250</option>
+            </select>
+            <input type="text" id="name" placeholder="नाम / Name" required>
+            <input type="tel" id="phone" placeholder="WhatsApp नंबर" required>
+            <button type="submit">Book Now</button>
+        </form>
+
+        <div class="bookings-list">
+            <h3>All Bookings</h3>
+            <ul id="all-bookings"></ul>
+        </div>
+
+        <p style="text-align:center; margin-top:30px;">
+            📍 Abohar, Punjab • WhatsApp: <strong>Your Phone Number</strong><br>
+            Timings: 10 AM - 11 PM
+        </p>
+    </div>
+
+    <script>
+        let pcs = [
+            {id:1, name:"PC-1 (High End)", status:"available", bookedUntil:""},
+            {id:2, name:"PC-2 (RTX)", status:"available", bookedUntil:""},
+            {id:3, name:"PC-3", status:"available", bookedUntil:""},
+            {id:4, name:"PC-4", status:"available", bookedUntil:""}
+        ];
+
+        let bookings = JSON.parse(localStorage.getItem('ogCafeBookings')) || [];
+
+        function saveData() {
+            localStorage.setItem('ogCafeBookings', JSON.stringify(bookings));
+        }
+
+        function render() {
+            const grid = document.getElementById('pc-grid');
+            grid.innerHTML = '';
+            pcs.forEach(pc => {
+                const card = document.createElement('div');
+                card.className = `pc-card ${pc.status}`;
+                card.innerHTML = `
+                    <h3>${pc.name}</h3>
+                    <div class="status">${pc.status.toUpperCase()} ${pc.bookedUntil ? '<br>'+pc.bookedUntil : ''}</div>
+                    <button onclick="selectPC(${pc.id})" ${pc.status==='booked' ? 'disabled' : ''}>Book This PC</button>
+                `;
+                grid.appendChild(card);
+            });
+
+            const select = document.getElementById('pc-select');
+            select.innerHTML = '<option value="">PC चुनें</option>';
+            pcs.filter(p => p.status === 'available').forEach(pc => {
+                const opt = document.createElement('option');
+                opt.value = pc.id;
+                opt.textContent = pc.name;
+                select.appendChild(opt);
+            });
+
+            const list = document.getElementById('all-bookings');
+            list.innerHTML = '';
+            bookings.forEach((b, i) => {
+                const li = document.createElement('li');
+                li.innerHTML = `${b.name} - ${b.pc} @ ${b.date} ${b.time} (${b.duration}h) 
+                    <button onclick="cancelBooking(${i})" style="background:#f66;color:white;padding:5px 10px;">Cancel</button>`;
+                list.appendChild(li);
+            });
+        }
+
+        document.getElementById('booking-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const pcId = parseInt(document.getElementById('pc-select').value);
+            const pc = pcs.find(p => p.id === pcId);
+            if (!pc) return;
+
+            const booking = {
+                name: document.getElementById('name').value,
+                phone: document.getElementById('phone').value,
+                pc: pc.name,
+                date: document.getElementById('date').value,
+                time: document.getElementById('time').value,
+                duration: document.getElementById('duration').value
+            };
+
+            bookings.push(booking);
+            pc.status = 'booked';
+            pc.bookedUntil = `${booking.date} ${booking.time}`;
+
+            saveData();
+            alert('✅ Booking Confirmed for OG Gaming Cafe! We will contact you on WhatsApp.');
+            this.reset();
+            render();
+        });
+
+        function selectPC(id) {
+            document.getElementById('pc-select').value = id;
+            document.getElementById('booking-form').scrollIntoView({behavior:"smooth"});
+        }
+
+        function cancelBooking(index) {
+            if (confirm("Cancel this booking?")) {
+                const b = bookings[index];
+                const pc = pcs.find(p => p.name === b.pc);
+                if (pc) pc.status = 'available';
+                bookings.splice(index, 1);
+                saveData();
+                render();
+            }
+        }
+
+        render();
+    </script>
+</body>
+</html>
