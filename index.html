@@ -4,35 +4,165 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OG Gaming Cafe - Abohar</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        body { font-family: Arial, sans-serif; background: #0a0a1f; color: #0ff; margin:0; padding:0; }
-        header { background: linear-gradient(#1a0033, #000); padding: 20px; text-align:center; }
-        .container { max-width: 1100px; margin: 0 auto; padding: 15px; }
-        .pc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 15px; }
-        .pc-card { background: #16213e; border: 2px solid #0ff; border-radius: 12px; padding: 15px; text-align:center; }
-        .available { border-color: #0f0; }
-        .booked { border-color: #f66; }
-        .status { padding: 8px; font-weight: bold; border-radius: 8px; margin: 10px 0; }
-        .available .status { background: #003300; color: #0f0; }
-        .booked .status { background: #330000; color: #f66; }
-        form, .bookings-list { background: #16213e; padding: 20px; border-radius: 12px; margin: 20px 0; }
-        input, select, button { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; }
-        button { background: #0ff; color: #000; font-weight: bold; cursor: pointer; }
-        button:hover { background: #0cc; }
-        h1 { margin: 0; }
+        :root {
+            --neon: #00ffcc;
+            --dark: #0f0f1a;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: var(--dark);
+            color: #ddd;
+            line-height: 1.6;
+        }
+        header {
+            background: #000;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 3px solid var(--neon);
+        }
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        .logo {
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: var(--neon);
+            text-shadow: 0 0 15px var(--neon);
+        }
+        .hero {
+            height: 70vh;
+            background: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.85)), url('https://picsum.photos/id/1015/1920/1080') center/cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .hero h1 {
+            font-size: 3.5rem;
+            color: var(--neon);
+            text-shadow: 0 0 25px var(--neon);
+        }
+        .hero p { font-size: 1.4rem; margin: 15px 0 30px; }
+        .btn {
+            background: var(--neon);
+            color: #000;
+            padding: 15px 35px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        section { padding: 60px 20px; max-width: 1200px; margin: 0 auto; }
+        h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            color: var(--neon);
+            margin-bottom: 40px;
+        }
+        .pc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        .pc-card {
+            background: #1a1a2e;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid #334155;
+            transition: all 0.3s;
+        }
+        .pc-card:hover {
+            transform: scale(1.05);
+            border-color: var(--neon);
+            box-shadow: 0 0 30px rgba(0,255,204,0.4);
+        }
+        .pc-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+        .pc-info { padding: 20px; text-align: center; }
+        .status {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .available { background: #14532d; color: #4ade80; }
+        .booked { background: #431407; color: #f87171; }
+        form {
+            background: #1a1a2e;
+            padding: 35px;
+            border-radius: 12px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        input, select {
+            width: 100%;
+            padding: 14px;
+            margin: 10px 0;
+            background: #16213e;
+            border: 1px solid #475569;
+            color: white;
+            border-radius: 8px;
+        }
+        button {
+            width: 100%;
+            padding: 16px;
+            background: var(--neon);
+            color: black;
+            font-weight: bold;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        footer {
+            background: #000;
+            text-align: center;
+            padding: 30px;
+            border-top: 2px solid var(--neon);
+        }
     </style>
 </head>
 <body>
     <header>
-        <h1>🚀 OG Gaming Cafe</h1>
-        <p>Premium PC Gaming Cafe • Abohar, Punjab</p>
+        <nav>
+            <div class="logo">OG GAMING CAFE</div>
+            <div>
+                <a href="#status" style="color:#ddd; margin: 0 15px;">Live PCs</a>
+                <a href="#book" style="color:#ddd; margin: 0 15px;">Book Now</a>
+            </div>
+        </nav>
     </header>
 
-    <div class="container">
-        <h2>Live PC Status</h2>
-        <div class="pc-grid" id="pc-grid"></div>
+    <div class="hero">
+        <div>
+            <h1>OG Gaming Cafe</h1>
+            <p>Abohar's Premium PC Gaming Hub</p>
+            <button class="btn" onclick="document.getElementById('book').scrollIntoView({behavior:'smooth'})">Book Your Slot</button>
+        </div>
+    </div>
 
-        <h2>Book Your Slot</h2>
+    <section id="status">
+        <h2>Live PC Availability</h2>
+        <div class="pc-grid" id="pc-grid"></div>
+    </section>
+
+    <section id="book">
+        <h2>Book Your Gaming Slot</h2>
         <form id="booking-form">
             <select id="pc-select" required></select>
             <input type="date" id="date" required>
@@ -42,66 +172,53 @@
                 <option value="2">2 Hours - ₹180</option>
                 <option value="3">3 Hours - ₹250</option>
             </select>
-            <input type="text" id="name" placeholder="नाम / Name" required>
-            <input type="tel" id="phone" placeholder="WhatsApp नंबर" required>
-            <button type="submit">Book Now</button>
+            <input type="text" id="name" placeholder="Your Full Name" required>
+            <input type="tel" id="phone" placeholder="WhatsApp Number" required>
+            <button type="submit">Confirm Booking Now</button>
         </form>
+    </section>
 
-        <div class="bookings-list">
-            <h3>All Bookings</h3>
-            <ul id="all-bookings"></ul>
-        </div>
-
-        <p style="text-align:center; margin-top:30px;">
-            📍 Abohar, Punjab • WhatsApp: <strong>Your Phone Number</strong><br>
-            Timings: 10 AM - 11 PM
-        </p>
-    </div>
+    <footer>
+        <p>📍 Abohar, Punjab | WhatsApp: Your Number | 10 AM - 11 PM</p>
+        <p>© OG Gaming Cafe • All Rights Reserved</p>
+    </footer>
 
     <script>
         let pcs = [
-            {id:1, name:"PC-1 (High End)", status:"available", bookedUntil:""},
-            {id:2, name:"PC-2 (RTX)", status:"available", bookedUntil:""},
-            {id:3, name:"PC-3", status:"available", bookedUntil:""},
-            {id:4, name:"PC-4", status:"available", bookedUntil:""}
+            {id:1, name:"PC-1 - RTX 4060", status:"available", img:"https://picsum.photos/id/1015/600/300"},
+            {id:2, name:"PC-2 - High Performance", status:"available", img:"https://picsum.photos/id/201/600/300"},
+            {id:3, name:"PC-3 - RGB Setup", status:"available", img:"https://picsum.photos/id/180/600/300"},
+            {id:4, name:"PC-4 - Console Zone", status:"available", img:"https://picsum.photos/id/251/600/300"}
         ];
 
         let bookings = JSON.parse(localStorage.getItem('ogCafeBookings')) || [];
 
-        function saveData() {
-            localStorage.setItem('ogCafeBookings', JSON.stringify(bookings));
-        }
-
-        function render() {
+        function renderPCs() {
             const grid = document.getElementById('pc-grid');
             grid.innerHTML = '';
             pcs.forEach(pc => {
                 const card = document.createElement('div');
                 card.className = `pc-card ${pc.status}`;
                 card.innerHTML = `
-                    <h3>${pc.name}</h3>
-                    <div class="status">${pc.status.toUpperCase()} ${pc.bookedUntil ? '<br>'+pc.bookedUntil : ''}</div>
-                    <button onclick="selectPC(${pc.id})" ${pc.status==='booked' ? 'disabled' : ''}>Book This PC</button>
+                    <img src="${pc.img}" alt="${pc.name}">
+                    <div class="pc-info">
+                        <h3>${pc.name}</h3>
+                        <div class="status ${pc.status}">${pc.status.toUpperCase()}</div>
+                        <button onclick="selectPC(${pc.id})" style="width:100%;padding:12px;background:var(--neon);color:black;border:none;border-radius:8px;" ${pc.status==='booked' ? 'disabled' : ''}>
+                            Book This PC
+                        </button>
+                    </div>
                 `;
                 grid.appendChild(card);
             });
 
             const select = document.getElementById('pc-select');
-            select.innerHTML = '<option value="">PC चुनें</option>';
+            select.innerHTML = '<option value="">Select a PC</option>';
             pcs.filter(p => p.status === 'available').forEach(pc => {
                 const opt = document.createElement('option');
                 opt.value = pc.id;
                 opt.textContent = pc.name;
                 select.appendChild(opt);
-            });
-
-            const list = document.getElementById('all-bookings');
-            list.innerHTML = '';
-            bookings.forEach((b, i) => {
-                const li = document.createElement('li');
-                li.innerHTML = `${b.name} - ${b.pc} @ ${b.date} ${b.time} (${b.duration}h) 
-                    <button onclick="cancelBooking(${i})" style="background:#f66;color:white;padding:5px 10px;">Cancel</button>`;
-                list.appendChild(li);
             });
         }
 
@@ -122,31 +239,18 @@
 
             bookings.push(booking);
             pc.status = 'booked';
-            pc.bookedUntil = `${booking.date} ${booking.time}`;
-
-            saveData();
-            alert('✅ Booking Confirmed for OG Gaming Cafe! We will contact you on WhatsApp.');
+            localStorage.setItem('ogCafeBookings', JSON.stringify(bookings));
+            alert('✅ Booking Confirmed! We will contact you on WhatsApp.');
             this.reset();
-            render();
+            renderPCs();
         });
 
         function selectPC(id) {
             document.getElementById('pc-select').value = id;
-            document.getElementById('booking-form').scrollIntoView({behavior:"smooth"});
+            document.getElementById('book').scrollIntoView({behavior: "smooth"});
         }
 
-        function cancelBooking(index) {
-            if (confirm("Cancel this booking?")) {
-                const b = bookings[index];
-                const pc = pcs.find(p => p.name === b.pc);
-                if (pc) pc.status = 'available';
-                bookings.splice(index, 1);
-                saveData();
-                render();
-            }
-        }
-
-        render();
+        renderPCs();
     </script>
 </body>
 </html>
